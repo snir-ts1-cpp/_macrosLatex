@@ -1,0 +1,188 @@
+%------------------------------------------------------------------------------------------
+%   MACROS - Enseignements Rascol
+%   v1.0 du 06.10.22
+%------------------------------------------------------------------------------------------
+
+\RequirePackage[french]{babel}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{amsfonts} %Pour ajouter des lettres gothiques ex : \mathfrak{}
+\RequirePackage[export]{adjustbox} %Pour définir une largeur et hauteur max aux figures
+\RequirePackage{tcolorbox}% Pour faire des encadrés
+\RequirePackage{hyperref}%Pour mettre des liens hypertexte
+\RequirePackage{wrapfig}%Pour placer les figures à côté du texte
+\RequirePackage{awesomebox}%Permet de rajouter les blocs info, warning ...
+\RequirePackage{fontawesome5}%Pour mettre des symboles
+\RequirePackage{ccicons}% Ajout icones creativecommons
+\RequirePackage{lastpage}%Pour connaitre dernière page du document
+\RequirePackage{ragged2e}% Pour changer l'alignement du texte
+\RequirePackage{optidef}%Permet de créer des environnements
+\RequirePackage{parskip}%Création automatique de paragraphes
+\RequirePackage{titlesec}%Pour changer le style des titres
+\RequirePackage{enumitem}%Pour modifier les puces des items
+\RequirePackage{helvet} % Ajout de la police Helvetica
+\RequirePackage{multirow} % Pour fusionner les lignes dans un tableau
+\RequirePackage{float} % Pour avoir l'option H sur les flottants (forcer le placement Here)
+\RequirePackage{amsmath}%Pour aligner les équations dans les démos et ajouter des commentaires
+\RequirePackage{multicol} % Permet de scinder le texte en plusieurs colonnes
+\RequirePackage{menukeys} % Pour afficher des touches de clavier
+\RequirePackage[font=scriptsize]{caption} %Permet de réduire la taille de la police des légendes de figures
+\RequirePackage{verbatim} %Pour afficher du code source sans coloration syntaxique
+\RequirePackage{fancybox} % Pour faire des boites (Surlignage gris du type de fiche dans l'en-tête)
+
+%****************************************
+% Utilisation de MINTED --> Code Source
+%****************************************
+\RequirePackage[skip=1pt]{caption} %Pour mettre Minted dans un flottant
+\RequirePackage[newfloat,outputdir=output]{minted} % Pour afficher du code source
+\usemintedstyle{xcode}%style de minted
+\captionsetup[listing]{font=small,textfont=small,name=Code Source}%Pour mettre caption sous code source
+\AtBeginEnvironment{minted}{\dontdofcolorbox} %Pour supprimer ces satanés carrés rouges !
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\definecolor{bgb}{RGB}{239,239,239} % Définition d'une couleur de background pour les blocs de codes
+\definecolor{bgi}{RGB}{245,245,245} % Définition d'une couleur de background pour les codes inline
+\renewcommand{\theFancyVerbLine}{\sffamily \textcolor[RGB]{150,150,150}{\arabic{FancyVerbLine}}}%Changer le style des lines numbers
+%\newminted{cpp}{gobble=4,breaklines,bgcolor=bgb,fontsize=\footnotesize,fontfamily=fvm,linenos,xleftmargin=16pt,numbersep=1mm,frame=single,framesep=5pt} % Pour mettre les line numbers dans le cadre gris
+\newminted{cpp}{gobble=4,breaklines,bgcolor=bgb,fontsize=\footnotesize,fontfamily=fvm}
+\newminted{text}{gobble=4,breaklines,bgcolor=bgb,fontsize=\footnotesize,fontfamily=fvm}
+\setmintedinline{fontsize=\footnotesize,fontfamily=fvm,breaklines,bgcolor=bgi}
+
+%#######################################################################################################################
+%
+%                                               DEFINITIONS DE VARIABLES
+%
+%#######################################################################################################################
+\newcommand{\matiere}[1]{
+    \def\matiereVal{#1}
+}
+
+\newcommand{\sequence}[1]{
+    \def\sequenceVal{#1}
+}
+
+\newcommand{\titrefiche}[1]{
+     \def\titreficheVal{#1}
+}
+
+\newcommand{\version}[1]{
+    \def\versionVal{#1}
+}
+
+\newcommand{\dateversion}[1]{
+    \def\dateversionVal{#1}
+}
+
+\newcommand{\type}[1]{
+    \def\typeVal{#1}
+}
+
+\newcommand{\seqlogo}[1]{
+    \def\seqlogoVal{#1}
+}
+
+\newcommand{\imageintro}[1]{
+    \def\imageintroVal{#1}
+}
+
+%#######################################################################################################################
+%
+%                                               DEFINITIONS D'ENVIRONNEMENTS
+%
+%#######################################################################################################################
+%-------------------------------------------------------------------------
+% Environnement pour insertion cartouche/titre dans fiche
+%-------------------------------------------------------------------------
+\newcommand{\cartouche}{
+    \Large\textbf{\textit{\matiereVal}}\hfill\textbf{\seqlogoVal\ \sequenceVal}\\[0.1cm]
+    \colorbox{light-gray}{\textbf{\textsc{\typeVal}}} \hfill\large\textbf{\titreficheVal}\\[0.1cm]
+    \normalsize Lycée Louis Rascol, Albi\hfill \texttt{\versionVal\ \dateversionVal}\\
+    \smallskip\hrule\bigskip
+}
+
+%-------------------------------------------------------------------------
+% Environnement pour insertion des elems du programme demandées dans fiche
+%-------------------------------------------------------------------------
+\newcommand{\programme}[1]{
+    \textbf{\large\faCheckSquare[regular]\ Contenus du programme} \textit{
+        \begin{itemize}
+            #1
+        \end{itemize}
+        \bigskip
+    }
+}
+
+%-----------------------------------------------------------------
+% Environnement pour insertion intro dans fiche (avec figure)
+%-----------------------------------------------------------------
+\newcommand{\introduction}[3]{
+    \begin{wrapfigure}[11]{r}{5cm}
+        \centering
+        \includegraphics[max height=4cm,max width = 5cm]{#1}
+        \caption*{#2}
+    \end{wrapfigure}
+    \textbf{\large\faRocket\ Introduction} \\[0.2cm]
+            #3
+        \bigskip
+}
+
+%-----------------------------------------------------------------
+% Environnement pour insertion licence dans fiche
+%-----------------------------------------------------------------
+\newcommand{\licence}{
+    \textbf{\large\faCreativeCommons\ Licence} \\[0.2cm]
+    Ce document est mis à disposition selon les termes de la \href{https://creativecommons.org/licenses/by-nc-sa/2.0/fr/}{Licence Creative Commons Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International.}
+    \bigskip
+}
+
+%-----------------------------------------------------------------
+% Environnement pour insertion zone importante
+%-----------------------------------------------------------------
+\newcommand{\important}[2]{
+\begin{tcolorbox}[colback=red!5!white,
+                  colframe=red!75!black,
+                  title=\large #1
+                 ]
+    #2
+\end{tcolorbox}
+}
+%#######################################################################################################################
+%
+%                                               AUTRES PARAMETRAGES
+%
+%#######################################################################################################################
+
+%-----------------------------------------------------------------
+% Utilisation de la police helvética pour l'ensemble du document
+%-----------------------------------------------------------------
+\renewcommand{\familydefault}{\sfdefault}
+
+%-----------------------------------------------------------------
+% Définition de couleurs
+%-----------------------------------------------------------------
+\definecolor{light-gray}{gray}{0.75}
+
+%-----------------------------------------------------------------
+% Changement du style de puce pour enumitem
+%-----------------------------------------------------------------
+\setitemize[0]{label=\textbullet, font=\large,leftmargin=0.75cm}
+
+%------------------------------------------------------------------
+% Paramétrage Pour encadrer le nom des sections en gris
+%------------------------------------------------------------------
+% StackOverFlow : https://tex.stackexchange.com/questions/506428/background-color-for-section-title
+\titleformat{\section}{\Large\bfseries}{\rlap{\color{light-gray}\rule[-0.2cm]{\linewidth}{0.7cm}} \thesection}{1em}{}
+
+%------------------------------------------------------------------
+% Paramétrage de la couleur des liens
+%------------------------------------------------------------------
+\hypersetup{
+    colorlinks = true,
+    linkbordercolor = {white},
+    linkcolor = {black},
+    anchorcolor = {black},
+    citecolor = {black},
+    filecolor = {black},
+    menucolor = {black},
+    runcolor = {black},
+    urlcolor = {blue}
+}
